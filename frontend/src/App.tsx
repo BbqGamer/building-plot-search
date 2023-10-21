@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { MapContainer } from "react-leaflet/MapContainer";
 import { TileLayer } from "react-leaflet/TileLayer";
+import { ZoomControl } from "react-leaflet/ZoomControl";
 
 export const App = memo(() => {
   return (
@@ -24,11 +25,17 @@ export const App = memo(() => {
           </div>
         </div>
         <div className="flex-1 bg-neutral-700 rounded-md overflow-hidden">
-          <MapContainer className="h-full" center={[48.15, 37.74]} zoom={12}>
+          <MapContainer
+            className="h-full"
+            center={[48.15, 37.74]}
+            zoom={12}
+            zoomControl={false}
+          >
             <TileLayer
               attribution='<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
+            <ZoomControl position="topright" />
           </MapContainer>
         </div>
       </div>
