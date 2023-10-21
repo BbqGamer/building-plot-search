@@ -1,4 +1,6 @@
 import { memo } from "react";
+import { MapContainer } from "react-leaflet/MapContainer";
+import { TileLayer } from "react-leaflet/TileLayer";
 
 export const App = memo(() => {
   return (
@@ -21,7 +23,14 @@ export const App = memo(() => {
             <h2>Results</h2>
           </div>
         </div>
-        <div className="flex-1 bg-neutral-700 rounded-md p-4">Map</div>
+        <div className="flex-1 bg-neutral-700 rounded-md overflow-hidden">
+          <MapContainer className="h-full" center={[48.15, 37.74]} zoom={12}>
+            <TileLayer
+              attribution='<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+          </MapContainer>
+        </div>
       </div>
     </div>
   );
