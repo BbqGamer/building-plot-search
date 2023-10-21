@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSM example</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+     <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
+
+    <style> #map { height: 600px; width: 800px; } </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <script>
+        // used to basic initialize the map in exact point asa center. (with zoom level = 13)
+        var map = L.map('map').setView([52.4036, 16.95], 17);
+
+        // to add base layer of map to view. Without it will be just "grey tile".
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+        
+        // to add just a marker
+        var marker = L.marker([52.404345, 16.949858]).addTo(map);
+        
+        // to add a circle on the map
+        var circle = L.circle(/*centec coords*/[52.403600, 16.950055], {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.5,
+            radius: 29
+        }).addTo(map);
+
+        // to add a polygon
+        var polygon = L.polygon([
+            // vertexes as a list of points
+            [52.403411, 16.948345],
+            [52.404594, 16.949514],
+            [52.404088, 16.950375],
+            [52.403041, 16.949343]
+        ], {
+            // some styles
+        }).addTo(map);
+
+        // binding popup info to map objects
+        marker.bindPopup("<b>My fresh bistro!</b><br><i>Best food source for students.</i>")
+        circle.bindPopup("<i>Cool smokespot</i> :D");
+        polygon.bindPopup("DB not just a database...")/*to activate on load, but only last will be opened (the one below)*/.openPopup();
+        
+        // to add standalone popup
+        var popup = L.popup()
+            .setLatLng([52.402497, 16.951411])
+            .setContent("<i>I had strings, but now I`m free.</i> - Ultron")
+            .openOn(map);
+
+        // events and smart part
+        /*
+        function onMapClick(e) {
+            alert("You clicked the map at " + e.latlng);
+        }
+        map.on('click', onMapClick);
+        */
+
+        var popup = L.popup();
+        function onMapClick(e) {
+            popup
+                .setLatLng(e.latlng)
+                .setContent(e.latlng.toString())
+                .openOn(map);
+        }
+        map.on('click', onMapClick);
+    </script>
+</body>
+</html>
