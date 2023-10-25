@@ -1,6 +1,7 @@
 import { Map as LeafletMap } from "leaflet";
 import { memo, useCallback, useRef } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import { Filters } from "./components/Filters";
 import { Map } from "./components/Map";
 
 export const App = memo(() => {
@@ -29,7 +30,7 @@ export const App = memo(() => {
         <Panel defaultSize={500} minSize={300} maxSize={900} collapsible>
           <div className="h-full flex flex-col gap-4 pl-4">
             <div className="flex-1 bg-neutral-700 rounded-md p-4">
-              <h2>Filters</h2>
+              <Filters />
             </div>
             <div className="flex-1 bg-neutral-700 rounded-md p-4">
               <h2>Results</h2>
@@ -41,7 +42,7 @@ export const App = memo(() => {
             <span className="h-8 w-1 rounded-full bg-neutral-100" />
           </div>
         </PanelResizeHandle>
-        <Panel>
+        <Panel minSize={200} collapsible>
           <div className="h-full rounded-md overflow-hidden relative mr-4">
             <Map {...{ setMap }} />
           </div>
