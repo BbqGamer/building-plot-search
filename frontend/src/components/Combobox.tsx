@@ -31,7 +31,7 @@ export const Combobox = memo(
           <HeadlessCombobox.Label>{label}</HeadlessCombobox.Label>
           <div className="relative mt-1">
             <HeadlessCombobox.Input
-              className="w-full rounded-md border-none py-2 pl-3 pr-10 text-neutral-900 focus:outline outline-2 outline-neutral-400 placeholder-neutral-400"
+              className="w-full rounded-md border-none bg-neutral-100 py-2 pl-3 pr-10 text-neutral-800 focus:outline outline-4 outline-blue-400 placeholder-neutral-400"
               displayValue={(x?: Option) => (x ? x.name : "")}
               onChange={(event) => {
                 setQuery(event.target.value);
@@ -45,7 +45,7 @@ export const Combobox = memo(
               }}
             >
               <ChevronUpDownIcon
-                className="h-5 w-5 text-neutral-400"
+                className="h-5 w-5 text-neutral-800"
                 aria-hidden="true"
               />
             </HeadlessCombobox.Button>
@@ -64,7 +64,7 @@ export const Combobox = memo(
                       `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
                         active
                           ? "bg-neutral-400 text-neutral-100"
-                          : "text-neutral-900"
+                          : "text-neutral-800"
                       }`
                     }
                     value={x}
@@ -81,7 +81,7 @@ export const Combobox = memo(
                         {selected ? (
                           <span
                             className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
-                              active ? "text-neutral-100" : "text-neutral-900"
+                              active ? "text-neutral-100" : "text-neutral-800"
                             }`}
                           >
                             <CheckIcon className="h-5 w-5" aria-hidden="true" />

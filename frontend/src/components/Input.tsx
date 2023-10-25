@@ -8,18 +8,21 @@ export type InputProps = {
 } & ComponentPropsWithoutRef<"input">;
 
 export const Input = memo(
-  ({ label, value, setValue, className, ...rest }: InputProps) => (
+  ({ label, value, setValue, className, children, ...rest }: InputProps) => (
     <label className={`${className} text-sm`}>
-      {label}
-      <input
-        placeholder="Enter"
-        value={value}
-        onChange={(e) => {
-          setValue(e.target.value);
-        }}
-        className="mt-1 w-full rounded-md border-none py-2 px-3 text-neutral-900 focus:outline outline-2 outline-neutral-400 placeholder-neutral-400"
-        {...rest}
-      />
+      <span className="text-neutral-100">{label}</span>
+      <div className="relative mt-1 ">
+        <input
+          placeholder="Enter"
+          value={value}
+          onChange={(e) => {
+            setValue(e.target.value);
+          }}
+          className="w-full bg-neutral-100 rounded-md border-none py-2 px-3 text-neutral-800 placeholder-neutral-400"
+          {...rest}
+        />
+        {children}
+      </div>
     </label>
   ),
 );

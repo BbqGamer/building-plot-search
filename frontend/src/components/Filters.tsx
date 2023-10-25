@@ -22,15 +22,26 @@ export const Filters = memo(() => {
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex gap-2">
-        <Input label="X" value={x} setValue={setX} className="flex-1" />
-        <Input label="Y" value={y} setValue={setY} className="flex-1" />
-        <button className="text-neutral-100 w-6 h-6 mt-7">
-          <MapPinIcon />
-        </button>
+      <div className="flex-1 flex flex-wrap gap-2">
+        <Input
+          label="X"
+          value={x}
+          setValue={setX}
+          className="flex-1 basis-[80px]"
+        />
+        <Input
+          label="Y"
+          value={y}
+          setValue={setY}
+          className="flex-1 basis-[80px]"
+        />
+        <div className="grow basis-[190px] flex gap-2">
+          <RadiusInput value={radius} setValue={setRadius} />
+          <button className="text-neutral-800 p-2 rounded-md bg-neutral-100 mt-6">
+            <MapPinIcon className="h-5 w-5" />
+          </button>
+        </div>
       </div>
-
-      <RadiusInput value={radius} setValue={setRadius} />
       {/* Area */}
 
       <Combobox
