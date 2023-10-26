@@ -65,7 +65,7 @@ class Plot(BaseModel):
     district: int
     sheet: int
     plot_number: str
-    geometry: tuple[float, float]
+    geometry: list[tuple[float, float]]
     area: float
 
 
@@ -80,7 +80,7 @@ def plots_for_district(plots: gpd.GeoDataFrame, district_id: int, min_area: int,
             district=row.district,
             sheet=row.sheet,
             plot_number=row.plot_number,
-            geometry=row.geometry.exterior.coords[0],
+            geometry=row.geometry.exterior.coords,
             area=row.geometry.area,
         )
         results.append(p)
