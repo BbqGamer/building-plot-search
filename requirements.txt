@@ -1,3 +1,5 @@
 fastapi==0.104.0
 pydantic==2.4.2
 uvicorn==0.23.2
+pyarrow==0.13.0
+geopandas=0.14.0

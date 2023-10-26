@@ -1,9 +1,13 @@
 from typing import Union
+from app.plots import import_plot_data
+import logging
 
 from fastapi import FastAPI
 
 app = FastAPI()
 
+logging.basicConfig(level=logging.INFO)
+plots = import_plot_data()
 
 @app.get("/")
 def read_root():
