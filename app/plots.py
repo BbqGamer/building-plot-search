@@ -22,3 +22,15 @@ def import_plot_data():
         return plots
     else:
         raise FileNotFoundError('No plot data found.')
+
+
+def process_plot_id_column(plots: gpd.GeoDataFrame) -> None:
+    """Split plot_id column into district, sheet, and plot_number columns"""
+    logging.info("Processing plot_id column...")
+
+    def split_plot_id(plot_id):
+        _, district, sheet, plot_number = plot_id.split('.')
+        return int(district), int(sheet[3:]), plot_number
+
+    plots[['district', 'sheet', 'plot_number']] = plots.idDzialki.apply(split_plot_id).tolist()
+        

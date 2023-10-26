@@ -1,5 +1,5 @@
 from typing import Union
-from app.plots import import_plot_data
+from app.plots import import_plot_data, process_plot_id_column
 import logging
 
 from fastapi import FastAPI
@@ -7,7 +7,9 @@ from fastapi import FastAPI
 app = FastAPI()
 
 logging.basicConfig(level=logging.INFO)
+
 plots = import_plot_data()
+process_plot_id_column(plots)
 
 @app.get("/")
 def read_root():
