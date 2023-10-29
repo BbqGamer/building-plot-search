@@ -4,9 +4,9 @@
 *Warning*: The data file called plots.gml has to be in a directory `data`
 ```
 mkdir data && cd data
-wget https://bip.geopoz.poznan.pl/download/119/8782/budynkiewidencyjnestannadzien19102023.zip
+wget https://bip.geopoz.poznan.pl/download/119/8781/dzialkiewidencyjnestannadzien19102023.zip
 7z x *.zip
-mv *.zip plots.gml
+mv *.gml plots.gml
 ```
 
 ## Usage
