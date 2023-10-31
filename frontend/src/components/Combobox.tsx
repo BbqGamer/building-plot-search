@@ -5,7 +5,7 @@ import { memo, useState } from "react";
 export type Option = { id: number; name: string };
 
 export type ComboboxProps = {
-  label: string;
+  label?: string;
   options: Option[];
   selected: number | null;
   setSelected: (x: number) => void;
@@ -28,8 +28,12 @@ export const Combobox = memo(
     return (
       <HeadlessCombobox value={selected} onChange={setSelected} nullable>
         <div className="relative text-sm">
-          <HeadlessCombobox.Label>{label}</HeadlessCombobox.Label>
-          <div className="relative mt-1">
+          {label && (
+            <HeadlessCombobox.Label className="block mb-1">
+              {label}
+            </HeadlessCombobox.Label>
+          )}
+          <div className="relative">
             <HeadlessCombobox.Input
               className="w-full rounded-md border-none bg-neutral-100 py-2 pl-3 pr-10 text-neutral-800 focus:outline outline-4 outline-blue-400 placeholder-neutral-400"
               displayValue={(x?: Option) => (x ? x.name : "")}
@@ -50,7 +54,7 @@ export const Combobox = memo(
               />
             </HeadlessCombobox.Button>
           </div>
-          <div className="rounded-md overflow-hidden h-fit absolute mt-2 w-full">
+          <div className="rounded-md overflow-hidden h-fit absolute mt-2 w-full z-[1]">
             <HeadlessCombobox.Options className="max-h-80 overflow-auto rounded-md bg-neutral-100 py-1">
               {filtered.length === 0 && query !== "" ? (
                 <div className="select-none py-2 px-4 text-neutral-400">

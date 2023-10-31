@@ -18,7 +18,7 @@ export const Input = memo(
           onChange={(e) => {
             setValue(e.target.value);
           }}
-          className="w-full bg-neutral-100 rounded-md border-none py-2 px-3 text-neutral-800 placeholder-neutral-400"
+          className="w-full bg-neutral-100 rounded-md py-2 px-3 text-neutral-800 placeholder-neutral-400"
           {...rest}
         />
         {children}

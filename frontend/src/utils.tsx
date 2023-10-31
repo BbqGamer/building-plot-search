@@ -1,15 +1,24 @@
+export const INITIAL_X = 16.9252;
+export const INITIAL_Y = 52.4064;
+
+export const MIN_X = 14.1167;
+export const MAX_X = 24.15;
+
+export const MIN_Y = 49;
+export const MAX_Y = 54.8334;
+
 export const DEFAULT_RADIUS = 8;
 
-enum LocationType {
+enum ToponymType {
   District = 0,
   City = 1,
   State = 2,
 }
 
-type Location = {
+type Toponym = {
   id: number;
   name: string;
-  type: LocationType;
+  type: ToponymType;
 };
 
 type Purpose = {
