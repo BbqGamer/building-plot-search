@@ -1,22 +1,25 @@
 import pathlib
-import geopandas as gpd
 import logging
 from pydantic import BaseModel
+import geopandas as gpd
+
+gpd.options.io_engine = "pyogrio"
 
 
 DATA_DIR = pathlib.Path('data')
 PLOTS_GML = DATA_DIR / 'plots.gml'
 PLOTS_FEATHER = DATA_DIR / 'plots.feather'
 
+
 def import_plot_data() -> gpd.GeoDataFrame:
     """Import plot data from GML file, or feather file if it exists
     If feather doesn't exist but GML does, create feather file"""
 
     if PLOTS_FEATHER.exists():
-        logging.info("Importing data from feather file...")
+        logging.info("Importing plots data from feather file...")
         return gpd.read_feather(PLOTS_FEATHER)
     elif PLOTS_GML.exists():
-        logging.info("Importing data from GML file...")
+        logging.info("Importing plots data from GML file...")
         plots = gpd.read_file(PLOTS_GML)
         logging.info("Converting to feather file...")
         plots.to_feather(PLOTS_FEATHER)
@@ -37,7 +40,7 @@ def prepare_plot_dataframe(plots: gpd.GeoDataFrame) -> None:
         "nrRejestruZabytkow",
         "idRejonuStatystycznego",
         "dzialkaObjetaFormaOchronyPrzyrody",
-    ] # These columns were empty
+    ]  # These columns were empty
 
     logging.info(plots.columns)
     plots.drop(columns=TO_DROP, inplace=True)
@@ -57,8 +60,9 @@ def process_plot_id_column(plots: gpd.GeoDataFrame) -> None:
         _, district, sheet, plot_number = plot_id.split('.')
         return int(district), int(sheet[3:]), plot_number
 
-    plots[['district', 'sheet', 'plot_number']] = plots.id.apply(split_plot_id).tolist()
-        
+    plots[['district', 'sheet', 'plot_number']
+          ] = plots.id.apply(split_plot_id).tolist()
+
 
 class Plot(BaseModel):
     id: str
@@ -73,7 +77,8 @@ def plots_for_district(plots: gpd.GeoDataFrame, district_id: int, min_area: int,
     """Return plots for a given district"""
     logging.info(f"Getting plots for district {district_id}...")
     results = []
-    filtered = plots[(plots.district == district_id) & (plots.geometry.area > min_area) & (plots.geometry.area < max_area)]
+    filtered = plots[(plots.district == district_id) & (
+        plots.geometry.area > min_area) & (plots.geometry.area < max_area)]
     for _, row in filtered.iterrows():
         p = Plot(
             id=row.id,

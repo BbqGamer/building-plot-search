@@ -5,6 +5,8 @@ from app.plots import (
     plots_for_district,
     prepare_plot_dataframe
 )
+
+from app.buildings import import_building_data
 from app.districts import all_districts, District
 import logging
 
@@ -17,6 +19,8 @@ logging.basicConfig(level=logging.INFO)
 plots = import_plot_data()
 prepare_plot_dataframe(plots)
 process_plot_id_column(plots)
+
+buildings = import_building_data()
 
 @app.get("/")
 def read_root():
