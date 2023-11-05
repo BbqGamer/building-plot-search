@@ -1,17 +1,8 @@
-# Building plot search
+# Backend:
 
-## Developer's guide
+All steps in this section should be run from the `backend` directory. `cd backend`
 
-### Frontend:
-
-- `cd frontend`
-- Install Bun: `curl -fsSL https://bun.sh/install | bash`
-- Install dependencies: `bun i`
-- Start development server: `bun dev`
-
-### Backend:
-
-#### Downloading data
+## Downloading data
 
 _Warning_: The data file called plots.gml has to be in a directory `data`
 
@@ -26,7 +17,7 @@ wget https://bip.geopoz.poznan.pl/download/119/8782/budynkiewidencyjnestannadzie
 mv EGiB.GML_209415_2023_10_19_wybrane.gml buildings.gml
 ```
 
-#### Usage
+## Usage
 
 To build an image:
 `docker build -t building-plot-search .`
