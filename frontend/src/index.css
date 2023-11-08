@@ -5,9 +5,22 @@
 @tailwind utilities;
 
 @layer base {
-  *:focus {
+  *:not([tabIndex="-1"]):focus {
     @apply outline;
     @apply outline-blue-400;
     @apply outline-4;
+  }
+
+  ::-webkit-scrollbar {
+    @apply w-1;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-neutral-500;
+    @apply rounded-md;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-neutral-600;
   }
 }

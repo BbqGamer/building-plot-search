@@ -6,27 +6,33 @@ export type Option = { id: number; name: string };
 
 export type ComboboxProps = {
   label?: string;
-  options: Option[];
-  selected: number | null;
-  setSelected: (x: number) => void;
+  options?: Option[];
+  selected: Option | null;
+  setSelected: (x: Option) => void;
 };
 
 export const Combobox = memo(
   ({ label, options, selected, setSelected }: ComboboxProps) => {
     const [query, setQuery] = useState("");
 
-    const filtered =
-      query === ""
+    const filtered = options
+      ? query === ""
         ? options
         : options.filter((x) =>
             x.name
               .toLowerCase()
               .replace(/\s+/g, "")
               .includes(query.toLowerCase().replace(/\s+/g, "")),
-          );
+          )
+      : [];
 
     return (
-      <HeadlessCombobox value={selected} onChange={setSelected} nullable>
+      <HeadlessCombobox
+        disabled={!options}
+        value={selected}
+        onChange={setSelected}
+        nullable
+      >
         <div className="relative text-sm">
           {label && (
             <HeadlessCombobox.Label className="block mb-1">

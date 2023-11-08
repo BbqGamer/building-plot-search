@@ -1,17 +1,15 @@
 import { Tab } from "@headlessui/react";
 import { MapPinIcon } from "@heroicons/react/24/solid";
-import { memo, useState } from "react";
-import { DEFAULT_RADIUS, INITIAL_X, INITIAL_Y } from "../utils";
+import { memo } from "react";
+import { useQuery } from "react-query";
+import { fetchToponyms } from "../utils";
 import { Combobox } from "./Combobox";
 import { FibonacciInput } from "./FibonacciInput";
-import { options } from "./Filters";
 import { Input } from "./Input";
+import { RequestState } from "./Prompt";
 
-export const Location = memo(() => {
-  const [x, setX] = useState(INITIAL_X.toString());
-  const [y, setY] = useState(INITIAL_Y.toString());
-  const [radius, setRadius] = useState(DEFAULT_RADIUS);
-  const [toponym, setToponym] = useState(0);
+export const Location = memo(({ request, setRequest }: RequestState) => {
+  const { data: toponyms } = useQuery(["toponyms"], fetchToponyms);
 
   return (
     <Tab.Group as="div" className="text-sm">
@@ -55,9 +53,11 @@ export const Location = memo(() => {
           }}
         >
           <Combobox
-            selected={toponym}
-            setSelected={setToponym}
-            options={options}
+            selected={request.toponym || null}
+            setSelected={(x) => {
+              setRequest((y) => ({ ...y, toponym: x }));
+            }}
+            options={toponyms}
           />
         </Tab.Panel>
         <Tab.Panel
@@ -69,8 +69,10 @@ export const Location = memo(() => {
         >
           <Input
             label="X"
-            value={x}
-            setValue={setX}
+            value={String(request.x)}
+            setValue={(x) => {
+              setRequest((y) => ({ ...y, x: parseFloat(x) }));
+            }}
             type="number"
             min={14}
             max={24}
@@ -79,8 +81,10 @@ export const Location = memo(() => {
           />
           <Input
             label="Y"
-            value={y}
-            setValue={setY}
+            value={String(request.y)}
+            setValue={(x) => {
+              setRequest((y) => ({ ...y, y: parseFloat(x) }));
+            }}
             type="number"
             min={49}
             max={55}
@@ -88,7 +92,12 @@ export const Location = memo(() => {
             className="flex-1 basis-[80px]"
           />
           <div className="grow basis-[190px] flex gap-2">
-            <FibonacciInput value={radius} setValue={setRadius} />
+            <FibonacciInput
+              value={request.radius!}
+              setValue={(x) => {
+                setRequest((y) => ({ ...y, radius: x }));
+              }}
+            />
             <button className="text-neutral-800 p-2 rounded-md bg-neutral-100 mt-6">
               <MapPinIcon className="h-5 w-5" />
             </button>
