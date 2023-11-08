@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { Circle } from "react-leaflet";
+import { Circle, Polygon } from "react-leaflet";
 import { useQuery } from "react-query";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import {
@@ -47,8 +47,10 @@ export const Prompt = memo(() => {
 
   const { data: toponyms } = useQuery(["toponyms"], fetchToponyms);
 
-  const { data: plots } = useQuery(["plots", request], () =>
-    fetchPlots(request),
+  const { data: plots } = useQuery(
+    ["plots", request],
+    () => fetchPlots(request),
+    { keepPreviousData: true },
   );
 
   return (
@@ -97,9 +99,9 @@ export const Prompt = memo(() => {
       <Panel minSize={400} collapsible>
         <div className="h-full mr-4">
           <Map setMap={setMap}>
-            {/* {plots?.map((x) => (
+            {plots?.map((x) => (
               <Polygon key={x.id} color="green" positions={x.polygon} />
-            ))} */}
+            ))}
             <Circle
               center={[request.y!, request.x!]}
               color="#404040"

@@ -75,7 +75,7 @@ class Plot(BaseModel):
     centroid: tuple[float, float] = None
 
 
-WEB_MERCATOR_CRS = 'EPSG:3857'
+WEB_MERCATOR_CRS = 'WGS84'
 HEAD = 20  # For now show only 20 plots change to pagination later
 
 
