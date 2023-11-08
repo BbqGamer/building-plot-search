@@ -2,6 +2,7 @@ import pathlib
 import logging
 from pydantic import BaseModel
 import geopandas as gpd
+from typing import Optional
 
 gpd.options.io_engine = "pyogrio"
 
@@ -71,15 +72,25 @@ class Plot(BaseModel):
     plot_number: str
     geometry: list[tuple[float, float]]
     area: float
+    centroid: tuple[float, float] = None
 
 
-def plots_for_district(plots: gpd.GeoDataFrame, district_id: int, min_area: int, max_area: int) -> list[Plot]:
+WEB_MERCATOR_CRS = 'EPSG:3857'
+HEAD = 20  # For now show only 20 plots change to pagination later
+
+
+def plots_for_district(plots: gpd.GeoDataFrame, district_id: int, min_area: float, max_area: float) -> list[Plot]:
     """Return plots for a given district"""
     logging.info(f"Getting plots for district {district_id}...")
     results = []
-    filtered = plots[(plots.district == district_id) & (
-        plots.geometry.area > min_area) & (plots.geometry.area < max_area)]
-    for _, row in filtered.iterrows():
+    plots_d = plots[(plots.district == district_id)
+                    ] if district_id != 0 else plots
+    filtered = plots_d[(plots_d.geometry.area > min_area) &
+                       (plots_d.geometry.area < max_area)].head(HEAD)
+
+    # Project from EPSG:2177 (Poland) to EPSG:3857 (Web Mercator)
+    converted = filtered.to_crs(WEB_MERCATOR_CRS)  # type: ignore
+    for _, row in converted.iterrows():
         p = Plot(
             id=row.id,
             district=row.district,
@@ -87,6 +98,7 @@ def plots_for_district(plots: gpd.GeoDataFrame, district_id: int, min_area: int,
             plot_number=row.plot_number,
             geometry=row.geometry.exterior.coords,
             area=row.geometry.area,
+            centroid=row.geometry.centroid.coords[0],
         )
         results.append(p)
     return results
