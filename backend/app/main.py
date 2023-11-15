@@ -14,8 +14,16 @@ from app.plots import (
     prepare_plot_dataframe,
     process_plot_id_column,
 )
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
+
+from apscheduler.schedulers.background import BackgroundScheduler
+from app.update import (
+    is_data_up_to_date, 
+    download_and_unzip_archive, 
+    delete_all_data
+)
+
 
 app = FastAPI()
 

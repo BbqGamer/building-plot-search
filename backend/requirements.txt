@@ -27,3 +27,4 @@ typing_extensions==4.8.0
 tzdata==2023.3
 uvicorn==0.23.2
 pyogrio==0.7.2
+apscheduler==3.10.4
