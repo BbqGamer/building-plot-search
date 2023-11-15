@@ -60,3 +60,10 @@ MAX_AREA = 1000000
 @app.get("/plots/")
 def get_plots_for_district(district_id: int = 0, min_area: float = 0.0, max_area: float = MAX_AREA):
     return plots_for_district(plots, district_id, min_area, max_area)
+
+
+@app.get("/update_data/")
+def manual_data_update():
+    delete_all_data()
+    download_and_unzip_archive("https://bip.geopoz.poznan.pl/download/119/8781/data.zip", "data")
+    download_and_unzip_archive("https://bip.geopoz.poznan.pl/download/119/8782/data.zip", "data")
