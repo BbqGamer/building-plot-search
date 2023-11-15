@@ -37,11 +37,24 @@ app.add_middleware(
 
 logging.basicConfig(level=logging.INFO)
 
+scheduler = BackgroundScheduler()
+scheduler.start()
+
 plots = import_plot_data()
 prepare_plot_dataframe(plots)
 process_plot_id_column(plots)
 
 buildings = import_building_data()
+
+def update_data_task():
+    logging.info("Autoupdating the data...")
+    if not is_data_up_to_date():
+        logging.info("Data is not up to date.")
+        delete_all_data()
+        download_and_unzip_archive("https://bip.geopoz.poznan.pl/download/119/8781/data.zip", "data")
+        download_and_unzip_archive("https://bip.geopoz.poznan.pl/download/119/8782/data.zip", "data")
+
+scheduler.add_job(update_data_task, 'cron', month='*', hour=0, minute=0)
 
 
 @app.get("/")
