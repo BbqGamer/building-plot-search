@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 import { Plot, fetchToponyms } from "../helpers";
 
 export const PlotCard = memo(
-  ({ plot, map }: { plot: Plot; map: Map | undefined }) => {
+  ({ id, plot, map }: { id: string; plot: Plot; map: Map | undefined }) => {
     const { data: toponyms } = useQuery(["toponyms"], fetchToponyms);
 
     const flyTo = () => {
@@ -14,7 +14,7 @@ export const PlotCard = memo(
     };
 
     return (
-      <div className="p-4 rounded-md bg-neutral-600">
+      <div id={id} className="p-4 rounded-md bg-neutral-600" tabIndex={0}>
         <div className="grid grid-cols-[100px_250px]">
           <span>ID:</span>
           <span>{plot.id}</span>

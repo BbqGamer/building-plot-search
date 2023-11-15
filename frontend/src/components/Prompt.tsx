@@ -61,7 +61,12 @@ export const Prompt = memo(() => {
           <div className="flex-1 bg-neutral-700 rounded-md p-4 pr-3 overflow-x-hidden overflow-y-scroll gap-2 grid grid-cols-[repeat(auto-fill,minmax(350px,1fr))]">
             {plots?.length
               ? plots.map((x) => (
-                  <PlotCard key={x.id} plot={x} map={mapRef.current} />
+                  <PlotCard
+                    key={x.id}
+                    id={x.id}
+                    plot={x}
+                    map={mapRef.current}
+                  />
                 ))
               : "No plots match the query"}
           </div>
@@ -76,7 +81,29 @@ export const Prompt = memo(() => {
         <div className="h-full mr-4">
           <Map setMap={setMap}>
             {plots?.map((x) => (
-              <Polygon key={x.id} color="#60a5fa" positions={x.polygon} />
+              <Polygon
+                key={x.id}
+                color="#60a5fa"
+                positions={x.polygon}
+                eventHandlers={{
+                  click: () => {
+                    mapRef.current?.flyTo([x.centroid[1], x.centroid[0]], 17, {
+                      duration: 0.3,
+                    });
+
+                    const listItem = document.getElementById(x.id);
+
+                    listItem?.scrollIntoView({
+                      behavior: "smooth",
+                      block: "center",
+                    });
+
+                    setTimeout(() => {
+                      listItem?.focus();
+                    }, 300);
+                  },
+                }}
+              />
             ))}
             <Circle
               center={[request.y!, request.x!]}
