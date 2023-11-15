@@ -16,10 +16,10 @@ import {
   INITIAL_Y,
   PlotsRequest,
   fetchPlots,
-  fetchToponyms,
-} from "../utils";
+} from "../helpers";
 import { Filters } from "./Filters";
 import { Map } from "./Map";
+import { PlotCard } from "./PlotCard";
 
 export type RequestState = {
   request: PlotsRequest;
@@ -45,8 +45,6 @@ export const Prompt = memo(() => {
     maxArea: 999999,
   });
 
-  const { data: toponyms } = useQuery(["toponyms"], fetchToponyms);
-
   const { data: plots } = useQuery(
     ["plots", request],
     () => fetchPlots(request),
@@ -60,32 +58,10 @@ export const Prompt = memo(() => {
           <div className="bg-neutral-700 rounded-md p-4">
             <Filters request={request} setRequest={setRequest} />
           </div>
-          <div className="flex-1 bg-neutral-700 rounded-md p-4 pr-3 overflow-x-hidden overflow-y-scroll flex flex-col gap-2">
+          <div className="flex-1 bg-neutral-700 rounded-md p-4 pr-3 overflow-x-hidden overflow-y-scroll gap-2 grid grid-cols-[repeat(auto-fill,minmax(350px,1fr))]">
             {plots?.length
               ? plots.map((x) => (
-                  <a
-                    key={x.id}
-                    href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${x.centroid[1]},${x.centroid[0]}`}
-                    target="_blank"
-                    className="select-text grid grid-cols-[auto_1fr] gap-x-8 p-4 rounded-md bg-neutral-600"
-                    draggable={false}
-                  >
-                    <span>ID:</span>
-                    <span>{x.id}</span>
-                    <span>Sheet:</span>
-                    <span>{x.sheet}</span>
-                    <span>Number:</span>
-                    <span>{x.number}</span>
-                    <span>District:</span>
-                    <span>
-                      {toponyms?.find((y) => y.id === x.topographyId)?.name ||
-                        "Unknown"}
-                    </span>
-                    <span>Area:</span>
-                    <span>
-                      {x.area.toFixed(2)} m<sup>2</sup>
-                    </span>
-                  </a>
+                  <PlotCard key={x.id} plot={x} map={mapRef.current} />
                 ))
               : "No plots match the query"}
           </div>
@@ -100,7 +76,7 @@ export const Prompt = memo(() => {
         <div className="h-full mr-4">
           <Map setMap={setMap}>
             {plots?.map((x) => (
-              <Polygon key={x.id} color="green" positions={x.polygon} />
+              <Polygon key={x.id} color="#60a5fa" positions={x.polygon} />
             ))}
             <Circle
               center={[request.y!, request.x!]}
