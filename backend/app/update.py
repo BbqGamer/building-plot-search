@@ -10,7 +10,7 @@ from datetime import datetime
 DATA_DIR = pathlib.Path('data')
 last_update = None
 
-def download_and_unzip_archive(zip_url:str, extract_to:str):
+def download_and_unzip_archive(zip_url:str, extract_to:str) -> None:
     """Download .zip archive from provided URL and unpack it to the target diractory."""
     logging.info("Downloading the .zip...")
     response = requests.get(zip_url)
@@ -47,7 +47,7 @@ def is_data_up_to_date() -> bool:
             if last_download == None:
                 logging.info("FIRST update, anyway will be executed.")
                 return False
-            logging.info(f"Last donwloaded version is ({last_download}), last available data from ({last_data_version}).")
+            logging.info(f"Last downloaded version is ({last_download}), last available data from ({last_data_version}).")
             if datetime.strftime(last_download, date_format) >= datetime.strftime(last_data_version, date_format):
                 last_download = last_data_version
                 return True
