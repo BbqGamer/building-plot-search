@@ -1,6 +1,6 @@
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { memo, useEffect, useRef, useState } from "react";
-import { DEFAULT_RADIUS } from "../utils";
+import { DEFAULT_RADIUS } from "../helpers";
 import { Input } from "./Input";
 
 export type FibonacciInputProps = {

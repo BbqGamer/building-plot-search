@@ -2,7 +2,7 @@ import { Tab } from "@headlessui/react";
 import { MapPinIcon } from "@heroicons/react/24/solid";
 import { memo } from "react";
 import { useQuery } from "react-query";
-import { fetchToponyms } from "../utils";
+import { fetchToponyms } from "../helpers";
 import { Combobox } from "./Combobox";
 import { FibonacciInput } from "./FibonacciInput";
 import { Input } from "./Input";
