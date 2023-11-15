@@ -58,3 +58,18 @@ def is_data_up_to_date() -> bool:
     
     return False
 
+def delete_all_data(directory_path:str) -> None:
+    """Made just for deleting old data from 'data' directory"""
+    logging.info("Deleting of old data is started.")
+    try:
+        files = os.listdir(directory_path)
+
+        for file_name in files:
+            file_path = os.path.join(directory_path, file_name)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+                logging.info(f"Deleted: {file_path}")
+
+        logging.info("All files deleted successfully.")
+    except Exception as e:
+        logging.info(f"An error occurred: {e}")
