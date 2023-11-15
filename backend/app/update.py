@@ -58,7 +58,7 @@ def is_data_up_to_date() -> bool:
     
     return False
 
-def delete_all_data(directory_path:str) -> None:
+def delete_all_data(directory_path = "data") -> None:
     """Made just for deleting old data from 'data' directory"""
     logging.info("Deleting of old data is started.")
     try:
