@@ -1,0 +1,13 @@
+{
+    "folders": [
+        {
+            "name": "FastAPI",
+            "path": "../backend"
+        },
+        {
+            "name": "React",
+            "path": "../frontend"
+        },
+    ],
+    "settings": {},
+}

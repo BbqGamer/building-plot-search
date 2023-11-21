@@ -1,11 +1,12 @@
 from pydantic import BaseModel
 
+
 class District(BaseModel):
     id: int
     name: str
 
 
-def all_districts() -> list[District]:
+def get_all_districts() -> list[District]:
     return [District(id=id, name=name) for id, name in district_map.items()]
 
 
@@ -49,6 +50,5 @@ district_map = {
     55: "RADOJEWO",
     56: "UMULTOWO",
     60: "DĘBIEC",
-    61: "WILDA"
+    61: "WILDA",
 }
-
