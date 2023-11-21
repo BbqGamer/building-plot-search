@@ -63,7 +63,24 @@ def process_plot_id_column(plots: gpd.GeoDataFrame) -> None:
 
     plots[['district', 'sheet', 'plot_number']
           ] = plots.id.apply(split_plot_id).tolist()
+    
+def check_if_plot_is_free(plots: gpd.GeoDataFrame, buildings: gpd.GeoDataFrame) -> None:
+    """Check if plot is free"""
+    logging.info("Checking if plot is free...")
 
+    overlay = gpd.overlay(plots[["plot_number", "geometry"]], buildings[["building_number", "geometry"]], how="intersection")
+
+    overlay = plots[['plot_number', 'geometry']].merge(overlay, on="plot_number", suffixes=("", "_p"))
+    overlay = gpd.GeoDataFrame(overlay, geometry="geometry")
+
+    threshold = 0.02
+    overlay["area"] = overlay.geometry.area
+    overlay["area_p"] = overlay.geometry_p.area # plot area
+
+    overlay["area_p>2%"] = overlay["area_p"] > threshold * overlay["area"]
+    overlay = overlay[overlay["area_p>2%"]]
+
+    plots["probably_free"] = plots["plot_number"].isin(overlay["plot_number"])
 
 class Plot(BaseModel):
     id: str
@@ -73,6 +90,7 @@ class Plot(BaseModel):
     geometry: list[tuple[float, float]]
     area: float
     centroid: tuple[float, float] = None
+    probably_free: bool
 
 
 WEB_MERCATOR_CRS = 'WGS84'
@@ -99,6 +117,7 @@ def plots_for_district(plots: gpd.GeoDataFrame, district_id: int, min_area: floa
             geometry=row.geometry.exterior.coords,
             area=row.geometry.area,
             centroid=row.geometry.centroid.coords[0],
+            probably_free=row.probably_free,
         )
         results.append(p)
     return results

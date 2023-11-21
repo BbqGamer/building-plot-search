@@ -25,7 +25,6 @@ app.add_middleware(
 
 logging.basicConfig(level=logging.INFO)
 
-
 @app.get("/update-data/")
 def update_data():
     logging.info("Autoupdating the data...")
@@ -39,7 +38,6 @@ def update_data():
             "https://bip.geopoz.poznan.pl/download/119/8782/data.zip", "data"
         )
 
-
 update_data()
 
 scheduler = BackgroundScheduler()
@@ -51,7 +49,10 @@ prepare_plot_dataframe(plots)
 process_plot_id_column(plots)
 
 buildings = import_building_data()
+prepare_building_dataframe(buildings)
+process_building_id_column(buildings)
 
+check_if_plot_is_free(plots, buildings)
 
 @app.get("/")
 def read_root():
@@ -62,9 +63,7 @@ def read_root():
 def get_all_districts() -> list[District]:
     return all_districts()
 
-
 MAX_AREA = 1000000
-
 
 @app.get("/plots/")
 def get_plots_for_district(
