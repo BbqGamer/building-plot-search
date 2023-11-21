@@ -9,37 +9,42 @@ class Plot(BaseModel):
     plot_number: str
     geometry: list[tuple[float, float]]
     area: float
-    centroid: tuple[float, float] = None
-    probably_free: bool
-
-
-WEB_MERCATOR_CRS = "WGS84"
-HEAD = 20  # For now show only 20 plots change to pagination later
+    centroid: tuple[float, float]
+    is_probably_free: bool
 
 
 def get_filtered_plots(
     plots: gpd.GeoDataFrame, district_id: int, min_area: float, max_area: float
 ) -> list[Plot]:
-    results = []
-    plots_d = plots[(plots.district == district_id)] if district_id != 0 else plots
-    filtered = plots_d[
-        (plots_d.geometry.area > min_area)
-        & (plots_d.geometry.area < max_area)
-        & (plots_d.probably_free)
-    ].head(HEAD)
+    filtered = plots[plots.is_probably_free]
 
-    # Project from EPSG:2177 (Poland) to EPSG:3857 (Web Mercator)
-    converted = filtered.to_crs(WEB_MERCATOR_CRS)  # type: ignore
+    if district_id:
+        filtered = filtered[filtered.district == district_id]
+
+    if min_area:
+        filtered = filtered[filtered.area >= min_area]
+
+    if max_area:
+        filtered = filtered[filtered.area <= max_area]
+
+    filtered = filtered.head(1000)
+    converted = filtered.to_crs("WGS84")
+    converted["area"] = filtered.geometry.area
+
+    results = []
+
     for _, row in converted.iterrows():
-        p = Plot(
-            id=row.id,
-            district=row.district,
-            sheet=row.sheet,
-            plot_number=row.plot_number,
-            geometry=row.geometry.exterior.coords,
-            area=row.geometry.area,
-            centroid=row.geometry.centroid.coords[0],
-            probably_free=row.probably_free,
+        results.append(
+            Plot(
+                id=row.id,
+                district=row.district,
+                sheet=row.sheet,
+                plot_number=row.plot_number,
+                geometry=row.geometry.exterior.coords,
+                area=row.area,
+                centroid=row.geometry.centroid.coords[0],
+                is_probably_free=row.is_probably_free,
+            )
         )
-        results.append(p)
+
     return results

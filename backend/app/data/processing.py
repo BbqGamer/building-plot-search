@@ -60,7 +60,7 @@ def check_if_plot_is_free(plots: gpd.GeoDataFrame, buildings: gpd.GeoDataFrame):
     overlay["area_p>2%"] = overlay["area_p"] > threshold * overlay["area"]
     overlay = overlay[overlay["area_p>2%"]]
 
-    plots["probably_free"] = plots["id"].isin(overlay["id"])
+    plots["is_probably_free"] = ~plots["id"].isin(overlay["id"])
 
 
 def get_processed(preprocessed: Preprocessed) -> Processed:
