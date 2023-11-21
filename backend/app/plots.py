@@ -23,7 +23,9 @@ def get_filtered_plots(
     results = []
     plots_d = plots[(plots.district == district_id)] if district_id != 0 else plots
     filtered = plots_d[
-        (plots_d.geometry.area > min_area) & (plots_d.geometry.area < max_area)
+        (plots_d.geometry.area > min_area)
+        & (plots_d.geometry.area < max_area)
+        & (plots_d.probably_free)
     ].head(HEAD)
 
     # Project from EPSG:2177 (Poland) to EPSG:3857 (Web Mercator)
