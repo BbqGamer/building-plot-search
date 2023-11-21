@@ -87,7 +87,7 @@ export const Prompt = memo(() => {
                 positions={x.polygon}
                 eventHandlers={{
                   click: () => {
-                    mapRef.current?.flyTo([x.centroid[1], x.centroid[0]], 17, {
+                    mapRef.current?.flyTo(x.centroid, 17, {
                       duration: 0.3,
                     });
 

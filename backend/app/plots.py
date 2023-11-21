@@ -40,9 +40,12 @@ def get_filtered_plots(
                 district=row.district,
                 sheet=row.sheet,
                 plot_number=row.plot_number,
-                geometry=row.geometry.exterior.coords,
+                geometry=[
+                    coordinate_pair[::-1]
+                    for coordinate_pair in row.geometry.exterior.coords
+                ],
                 area=row.area,
-                centroid=row.geometry.centroid.coords[0],
+                centroid=row.geometry.centroid.coords[0][::-1],
                 is_probably_free=row.is_probably_free,
             )
         )

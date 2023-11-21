@@ -8,7 +8,7 @@ export const PlotCard = memo(
     const { data: toponyms } = useQuery(["toponyms"], fetchToponyms);
 
     const flyTo = () => {
-      map?.flyTo([plot.centroid[1], plot.centroid[0]], 17, {
+      map?.flyTo(plot.centroid, 17, {
         duration: 0.3,
       });
     };
@@ -41,7 +41,9 @@ export const PlotCard = memo(
           </button>
           <a
             target="_blank"
-            href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${plot.centroid[1]},${plot.centroid[0]}`}
+            href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${plot.centroid.join(
+              ",",
+            )}`}
             className="flex-1 block p-1 text-center bg-neutral-500 text-neutral-100 rounded-md"
           >
             Street View

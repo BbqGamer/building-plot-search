@@ -88,7 +88,7 @@ export const fetchPlots = async (request: PlotsRequest) => {
       number: x.plot_number,
       sheet: x.sheet,
       centroid: x.centroid,
-      polygon: x.geometry.map(([x, y]) => [y, x]),
+      polygon: x.geometry,
     }),
   ) as Plot[];
 
