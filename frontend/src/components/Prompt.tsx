@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { Circle, Polygon } from "react-leaflet";
+import { Circle, LayerGroup, LayersControl, Polygon } from "react-leaflet";
 import { useQuery } from "react-query";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import {
@@ -80,31 +80,35 @@ export const Prompt = memo(() => {
       <Panel minSize={400} collapsible>
         <div className="h-full mr-4">
           <Map setMap={setMap}>
-            {plots?.map((x) => (
-              <Polygon
-                key={x.id}
-                color="#60a5fa"
-                positions={x.polygon}
-                eventHandlers={{
-                  click: () => {
-                    mapRef.current?.flyTo(x.centroid, 17, {
-                      duration: 0.3,
-                    });
+            <LayersControl.Overlay name="Plots" checked>
+              <LayerGroup>
+                {plots?.map((x) => (
+                  <Polygon
+                    key={x.id}
+                    color="#60a5fa"
+                    positions={x.polygon}
+                    eventHandlers={{
+                      click: () => {
+                        mapRef.current?.flyTo(x.centroid, 17, {
+                          duration: 0.3,
+                        });
 
-                    const listItem = document.getElementById(x.id);
+                        const listItem = document.getElementById(x.id);
 
-                    listItem?.scrollIntoView({
-                      behavior: "smooth",
-                      block: "center",
-                    });
+                        listItem?.scrollIntoView({
+                          behavior: "smooth",
+                          block: "center",
+                        });
 
-                    setTimeout(() => {
-                      listItem?.focus();
-                    }, 300);
-                  },
-                }}
-              />
-            ))}
+                        setTimeout(() => {
+                          listItem?.focus();
+                        }, 300);
+                      },
+                    }}
+                  />
+                ))}
+              </LayerGroup>
+            </LayersControl.Overlay>
             <Circle
               center={[request.y!, request.x!]}
               color="#404040"

@@ -33,7 +33,6 @@ export const Map = memo(({ setMap, children }: MapProps) => (
     maxBoundsViscosity={1}
     className="h-full max-w-full rounded-md focus:border-blue-400 border-neutral-100 border-4 border-solid focus:outline-none"
   >
-    {children}
     <LayersControl>
       <LayersControl.BaseLayer name="OpenStreetMap" checked>
         <TileLayer
@@ -75,6 +74,107 @@ export const Map = memo(({ setMap, children }: MapProps) => (
           attribution='&copy; <a href="http://www.sentinel-hub.com/" target="_blank">Sentinel Hub</a>'
         />
       </LayersControl.BaseLayer>
+      {children}
+      <LayersControl.Overlay name="Purpose" checked>
+        <WMSTileLayer
+          url="https://wms2.geopoz.poznan.pl/geoserver/urbanistyka/ows"
+          params={
+            {
+              layers: "mpzp_funkcje_pow_g_sql",
+              version: "1.3.0",
+              format: "image/png",
+              transparent: true,
+              CRS: "CRS:84",
+            } as WMSParams
+          }
+          opacity={0.75}
+        />
+      </LayersControl.Overlay>
+      <LayersControl.Overlay name="Landscape">
+        <WMSTileLayer
+          url="https://wms2.geopoz.poznan.pl/geoserver/urbanistyka/ows"
+          params={
+            {
+              layers: "krajobraz",
+              version: "1.3.0",
+              format: "image/png",
+              transparent: true,
+              CRS: "CRS:84",
+            } as WMSParams
+          }
+          opacity={0.5}
+        />
+      </LayersControl.Overlay>
+      <LayersControl.Overlay name="Building height">
+        <WMSTileLayer
+          url="https://wms2.geopoz.poznan.pl/geoserver/ows"
+          params={
+            {
+              layers: "mw_bloki",
+              version: "1.3.0",
+              format: "image/png",
+              CRS: "CRS:84",
+            } as WMSParams
+          }
+          opacity={0.75}
+        />
+      </LayersControl.Overlay>
+      <LayersControl.Overlay name="Revitalization">
+        <WMSTileLayer
+          url="https://wms2.geopoz.poznan.pl/geoserver/urbanistyka/ows"
+          params={
+            {
+              layers: "rewitalizacja_aft_sql",
+              version: "1.3.0",
+              format: "image/png",
+              transparent: true,
+              CRS: "CRS:84",
+            } as WMSParams
+          }
+        />
+      </LayersControl.Overlay>
+      <LayersControl.Overlay name="Investments">
+        <WMSTileLayer
+          url="https://wms2.geopoz.poznan.pl/geoserver/ows"
+          params={
+            {
+              layers: "inwestycje_group",
+              version: "1.3.0",
+              format: "image/png",
+              transparent: true,
+              CRS: "CRS:84",
+            } as WMSParams
+          }
+        />
+      </LayersControl.Overlay>
+      <LayersControl.Overlay name="Roads">
+        <WMSTileLayer
+          url="https://wms2.geopoz.poznan.pl/geoserver/topografia/ows"
+          params={
+            {
+              layers: "tereny_komunikacyjne_e_sql",
+              version: "1.3.0",
+              format: "image/png",
+              transparent: true,
+              CRS: "CRS:84",
+            } as WMSParams
+          }
+        />
+      </LayersControl.Overlay>
+      <LayersControl.Overlay name="Greenery">
+        <WMSTileLayer
+          url="https://wms2.geopoz.poznan.pl/geoserver/ows"
+          params={
+            {
+              layers: "podklad_uzbrojenie",
+              version: "1.3.0",
+              format: "image/png",
+              CRS: "CRS:84",
+            } as WMSParams
+          }
+          opacity={0.5}
+        />
+      </LayersControl.Overlay>
     </LayersControl>
     <MapHandler setMap={setMap} />
   </MapContainer>
