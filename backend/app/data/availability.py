@@ -1,6 +1,6 @@
 import logging
 from datetime import datetime
-from os import scandir
+from os import path, scandir
 from pathlib import Path
 
 import geopandas as gpd
@@ -19,10 +19,11 @@ def get_latest_path_and_freshness() -> [str | None, bool]:
     latest = None
     local_time = None
 
-    entries = [entry.name for entry in scandir(DATA_DIR) if entry.is_dir()]
-    if len(entries):
-        latest = max(entries)
-        local_time = datetime.strptime(latest, ENTRY_DATE_FORMAT)
+    if path.isdir(DATA_DIR):
+        entries = [entry.name for entry in scandir(DATA_DIR) if entry.is_dir()]
+        if len(entries):
+            latest = max(entries)
+            local_time = datetime.strptime(latest, ENTRY_DATE_FORMAT)
 
     if not latest:
         logging.info("No local data is available")

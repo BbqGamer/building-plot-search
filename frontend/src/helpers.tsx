@@ -23,7 +23,10 @@ export type Toponym = {
   type: ToponymType;
 };
 
-const API_ROOT = `http://127.0.0.1:8080`;
+const API_ROOT =
+  import.meta.env.MODE === "development"
+    ? `http://127.0.0.1:8080`
+    : "http://98.64.81.147";
 
 export const fetchToponyms = async () => {
   const result = await fetch(API_ROOT + "/districts/", {});
