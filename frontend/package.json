@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "bunx --bun vite --port 3000",
+    "dev": "bunx --bun vite",
     "build": "bunx --bun vite build",
-    "preview": "bunx --bun vite preview --port 3000"
+    "serve": "bunx --bun vite preview"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
