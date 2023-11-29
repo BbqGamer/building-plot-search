@@ -4,6 +4,7 @@ from zipfile import ZipFile
 
 import geopandas as gpd
 import requests
+from owslib.wfs import WebFeatureService
 
 from app.data import Preprocessed
 
@@ -26,8 +27,18 @@ def get_gdf_from_geopoz(id: int) -> gpd.GeoDataFrame:
 
     raise Exception(f"There is no GML file in {url}")
 
+def get_gdf_wfs_from_geopoz(name: str) -> gpd.GeoDataFrame:
+    """Fetches a GML files from GeoPoz by layer name. Reads and returns a GeoDataFrame from it."""
+
+    url = 'https://wms2.geopoz.poznan.pl/geoserver/topografia//wfs'
+
+    wfs11 = WebFeatureService(url, version='1.1.0')
+    output_format = 'GML2'
+    response = wfs11.getfeature(typename=name, outputFormat=output_format)
+    logging.info(f"Converting {name} to a GeoDataFrame...")
+    return gpd.read_file(io.BytesIO(response.read()))
 
 def get_preprocessed() -> Preprocessed:
     logging.info("Getting and preprocessing remote data...")
-    preprocessed = Preprocessed(get_gdf_from_geopoz(8781), get_gdf_from_geopoz(8782))
+    preprocessed = Preprocessed(get_gdf_from_geopoz(8781), get_gdf_from_geopoz(8782), get_gdf_wfs_from_geopoz("tereny_komunikacyjne_e_sql"), get_gdf_wfs_from_geopoz("tereny_wodne_e_sql"), get_gdf_wfs_from_geopoz("tereny_wodne_sql"), get_gdf_wfs_from_geopoz("zwj_poly_sql"), get_gdf_wfs_from_geopoz("zwr_poly_sql"))
     return preprocessed

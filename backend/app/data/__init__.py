@@ -12,7 +12,11 @@ ENTRY_DATE_FORMAT = "%y%m%d-%H%M"
 class Preprocessed(NamedTuple):
     plots: gpd.GeoDataFrame
     buildings: gpd.GeoDataFrame
-
+    streets: gpd.GeoDataFrame
+    water_areas1: gpd.GeoDataFrame
+    water_areas2: gpd.GeoDataFrame
+    staying_water: gpd.GeoDataFrame
+    running_water: gpd.GeoDataFrame
 
 class Processed(NamedTuple):
     plots: gpd.GeoDataFrame
