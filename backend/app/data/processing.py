@@ -59,6 +59,7 @@ def check_if_plot_is_free(plots: gpd.GeoDataFrame, buildings: gpd.GeoDataFrame):
         plots[["id", "geometry"]],
         buildings[["idBudynku", "geometry"]],
         how="intersection",
+        keep_geom_type=True,
     )
 
     overlay = plots[["id", "geometry"]].merge(overlay, on="id", suffixes=("", "_p"))
@@ -121,10 +122,10 @@ def get_processed(preprocessed: Preprocessed) -> Processed:
 
     check_if_plot_is_free(preprocessed.plots, preprocessed.buildings)
 
-    for df in [preprocessed.tereny_komunikacyjne, preprocessed.water_areas1, preprocessed.water_areas2, preprocessed.running_water, preprocessed.staying_water]:
+    for df in [preprocessed.streets, preprocessed.water_areas1, preprocessed.water_areas2, preprocessed.running_water, preprocessed.staying_water]:
         prepare_clearing_plots_dataframe(df)
 
-    for df in [preprocessed.tereny_komunikacyjne, preprocessed.water_areas1, preprocessed.water_areas2]:
+    for df in [preprocessed.streets, preprocessed.water_areas1, preprocessed.water_areas2]:
         multi_pol_unfree_plot(preprocessed.plots, df)
 
     for df in [preprocessed.running_water, preprocessed.staying_water]:
