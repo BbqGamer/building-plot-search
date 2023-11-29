@@ -34,7 +34,7 @@ def get_gdf_wfs_from_geopoz(name: str) -> gpd.GeoDataFrame:
 
     wfs11 = WebFeatureService(url, version='1.1.0')
     output_format = 'GML2'
-    response = wfs11.getfeature(typename=name, outputFormat=output_format)
+    response = wfs11.getfeature(typename='topografia:'+str(name), outputFormat=output_format)
     logging.info(f"Converting {name} to a GeoDataFrame...")
     return gpd.read_file(io.BytesIO(response.read()))
 
