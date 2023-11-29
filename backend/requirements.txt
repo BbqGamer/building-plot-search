@@ -35,3 +35,4 @@ tzdata==2023.3
 tzlocal==5.2
 urllib3==2.1.0
 uvicorn==0.24.0.post1
+owslib==0.29.3
