@@ -3,6 +3,7 @@ import logging
 from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.openapi.utils import get_openapi
 from fastapi.responses import RedirectResponse
 
 from app.data.availability import get_latest_path_and_freshness
@@ -14,6 +15,22 @@ from app.districts import get_all_districts
 from app.plots import get_filtered_plots
 
 app = FastAPI()
+
+
+def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
+    openapi_schema = get_openapi(
+        title="Building plot search API",
+        version="1.1.1",
+        description="The app is available at [http://plots.vrepetskyi.codes](http://plots.vrepetskyi.codes)",
+        routes=app.routes,
+    )
+    app.openapi_schema = openapi_schema
+    return app.openapi_schema
+
+
+app.openapi = custom_openapi
 
 app.add_middleware(
     CORSMiddleware,
@@ -27,12 +44,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-logging.basicConfig(level=logging.INFO)
-
 
 @app.get("/")
 def redirect_to_docs():
     return RedirectResponse("/docs")
+
+
+logging.basicConfig(level=logging.INFO)
 
 
 data = get_initial_data()
