@@ -1,0 +1,44 @@
+version: '3.8'
+services:
+  nginx-certbot:
+    image: jonasal/nginx-certbot:latest
+    env_file:
+      - ./secrets.env
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - startup:/startup
+      - secrets:/secrets
+      - config:/etc/nginx/user_conf.d
+    entrypoint: /bin/sh -c 'chmod +x /startup/startup.sh; /startup/startup.sh'
+  bps-fastapi:
+    image: vrepetskyi.azurecr.io/bps/fastapi:latest
+    build: ../
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+    volumes:
+      - processed:/code/processed
+volumes:
+  startup:
+    driver: azure_file
+    driver_opts:
+      share_name: startup
+      storage_account_name: bpsbackend
+  secrets:
+    driver: azure_file
+    driver_opts:
+      share_name: secrets
+      storage_account_name: bpsbackend
+  config:
+    driver: azure_file
+    driver_opts:
+      share_name: config
+      storage_account_name: bpsbackend
+  processed:
+    driver: azure_file
+    driver_opts:
+      share_name: processed
+      storage_account_name: bpsbackend

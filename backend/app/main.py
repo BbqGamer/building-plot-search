@@ -23,7 +23,7 @@ def custom_openapi():
     openapi_schema = get_openapi(
         title="Building plot search API",
         version="1.1.1",
-        description="The app is available at [http://plots.vrepetskyi.codes](http://plots.vrepetskyi.codes)",
+        description="The app is available at [https://plots.vrepetskyi.codes](https://plots.vrepetskyi.codes)",
         routes=app.routes,
     )
     app.openapi_schema = openapi_schema
@@ -35,13 +35,10 @@ app.openapi = custom_openapi
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://127.0.0.1:3000",
-        "http://plots.vrepetskyi.codes",
+        "http://localhost:3000",
         "https://plots.vrepetskyi.codes",
     ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET"],
 )
 
 

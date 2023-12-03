@@ -25,8 +25,8 @@ export type Toponym = {
 
 const API_ROOT =
   import.meta.env.MODE === "development"
-    ? `http://127.0.0.1:8080`
-    : "http://98.64.81.147";
+    ? `http://localhost:8080`
+    : "https://api.plots.vrepetskyi.codes";
 
 export const fetchToponyms = async () => {
   const result = await fetch(API_ROOT + "/districts/", {});
