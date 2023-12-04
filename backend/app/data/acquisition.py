@@ -36,9 +36,16 @@ def get_gdf_wfs_from_geopoz(name: str) -> gpd.GeoDataFrame:
     output_format = 'GML2'
     response = wfs11.getfeature(typename='topografia:'+str(name), outputFormat=output_format)
     logging.info(f"Converting {name} to a GeoDataFrame...")
-    return gpd.read_file(io.BytesIO(response.read()))
+    try:
+        gdf = gpd.read_file(io.BytesIO(response.read())) 
+        if gdf is not None:    
+            logging.info(f"Conversion of {name} to a GeoDataFrame successful.")
+        return gdf
+    except Exception as e:
+        print(f"Error parsing GML file: {e}")
+    
 
 def get_preprocessed() -> Preprocessed:
     logging.info("Getting and preprocessing remote data...")
-    preprocessed = Preprocessed(get_gdf_from_geopoz(8781), get_gdf_from_geopoz(8782), get_gdf_wfs_from_geopoz("tereny_komunikacyjne_e_sql"), get_gdf_wfs_from_geopoz("tereny_wodne_e_sql"), get_gdf_wfs_from_geopoz("tereny_wodne_sql"), get_gdf_wfs_from_geopoz("zwj_poly_sql"), get_gdf_wfs_from_geopoz("zwr_poly_sql"))
+    preprocessed = Preprocessed(get_gdf_from_geopoz(8781), get_gdf_from_geopoz(8782), get_gdf_wfs_from_geopoz("tereny_komunikacyjne_e_sql"), get_gdf_wfs_from_geopoz("tereny_wodne_e_sql"), get_gdf_wfs_from_geopoz("tereny_wodne_sql"), get_gdf_wfs_from_geopoz("kon_line_sql"), get_gdf_wfs_from_geopoz("zwj_poly_sql"), get_gdf_wfs_from_geopoz("zwr_poly_sql"))
     return preprocessed
