@@ -1,4 +1,5 @@
 import logging
+from os import getenv
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi import FastAPI
@@ -22,7 +23,7 @@ def custom_openapi():
         return app.openapi_schema
     openapi_schema = get_openapi(
         title="Building plot search API",
-        version="1.1.1",
+        version="1.1.2",
         description="The app is available at [https://plots.vrepetskyi.codes](https://plots.vrepetskyi.codes)",
         routes=app.routes,
     )
@@ -34,10 +35,11 @@ app.openapi = custom_openapi
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "https://plots.vrepetskyi.codes",
-    ],
+    allow_origins=(
+        ["https://plots.vrepetskyi.codes"]
+        if getenv("ENV") == "production"
+        else ["http://localhost:3000", "http://127.0.0.1:3000"]
+    ),
     allow_methods=["GET"],
 )
 

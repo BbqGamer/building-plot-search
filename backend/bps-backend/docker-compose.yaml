@@ -11,7 +11,7 @@ services:
       - startup:/startup
       - secrets:/secrets
       - config:/etc/nginx/user_conf.d
-    entrypoint: /bin/sh -c 'chmod +x /startup/startup.sh; /startup/startup.sh'
+    command: /bin/sh -c 'chmod +x /startup/startup.sh; /startup/startup.sh'
   bps-fastapi:
     image: vrepetskyi.azurecr.io/bps/fastapi:latest
     build: ../
@@ -21,6 +21,8 @@ services:
           memory: 2g
     volumes:
       - processed:/code/processed
+    environment:
+      - ENV=production
 volumes:
   startup:
     driver: azure_file

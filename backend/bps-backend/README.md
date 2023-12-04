@@ -4,7 +4,8 @@ The API is wrapped with [docker-nginx-certbot](https://github.com/JonasAlfredsso
 
 - Set environment variables in `secrets.env` (see `example.env`)
 - Create a Storage Account and File Shares in accordance to the compose file
-- Upload [NGINX server configuration](https://github.com/JonasAlfredsson/docker-nginx-certbot/blob/master/docs/good_to_know.md#how-the-script-add-domain-names-to-certificate-requests) to the `config` File Share
+- Upload the startup script
+- Upload the [NGINX server configuration](https://github.com/JonasAlfredsson/docker-nginx-certbot/blob/master/docs/good_to_know.md#how-the-script-add-domain-names-to-certificate-requests)
 
 ```bash
 # Login to Azure
