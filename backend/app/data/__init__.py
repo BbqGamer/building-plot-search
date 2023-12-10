@@ -18,6 +18,9 @@ class Preprocessed(NamedTuple):
     line_streets: gpd.GeoDataFrame
     staying_water: gpd.GeoDataFrame
     running_water: gpd.GeoDataFrame
+    tram_lines: gpd.GeoDataFrame
+    rail_lines1: gpd.GeoDataFrame
+    rail_lines2: gpd.GeoDataFrame
 
 class Processed(NamedTuple):
     plots: gpd.GeoDataFrame

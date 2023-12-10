@@ -47,5 +47,7 @@ def get_gdf_wfs_from_geopoz(name: str) -> gpd.GeoDataFrame:
 
 def get_preprocessed() -> Preprocessed:
     logging.info("Getting and preprocessing remote data...")
-    preprocessed = Preprocessed(get_gdf_from_geopoz(8781), get_gdf_from_geopoz(8782), get_gdf_wfs_from_geopoz("tereny_komunikacyjne_e_sql"), get_gdf_wfs_from_geopoz("tereny_wodne_e_sql"), get_gdf_wfs_from_geopoz("tereny_wodne_sql"), get_gdf_wfs_from_geopoz("kon_line_sql"), get_gdf_wfs_from_geopoz("zwj_poly_sql"), get_gdf_wfs_from_geopoz("zwr_poly_sql"))
+    preprocessed = Preprocessed(get_gdf_from_geopoz(8781), get_gdf_from_geopoz(8782), get_gdf_wfs_from_geopoz("tereny_komunikacyjne_e_sql"), 
+                                get_gdf_wfs_from_geopoz("tereny_wodne_e_sql"), get_gdf_wfs_from_geopoz("tereny_wodne_sql"), get_gdf_wfs_from_geopoz("kon_line_sql"), 
+                                get_gdf_wfs_from_geopoz("zwj_poly_sql"), get_gdf_wfs_from_geopoz("zwr_poly_sql"), get_gdf_wfs_from_geopoz("kot_line_sql"), get_gdf_wfs_from_geopoz("kok_line_sql"), get_gdf_wfs_from_geopoz("kow_line_sql"))
     return preprocessed
