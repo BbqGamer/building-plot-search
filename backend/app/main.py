@@ -17,13 +17,15 @@ from app.plots import get_filtered_plots
 
 app = FastAPI()
 
+VERSION = "1.1.3"
+
 
 def custom_openapi():
     if app.openapi_schema:
         return app.openapi_schema
     openapi_schema = get_openapi(
         title="Building plot search API",
-        version="1.1.2",
+        version=VERSION,
         description="The app is available at [https://plots.vrepetskyi.codes](https://plots.vrepetskyi.codes)",
         routes=app.routes,
     )
@@ -47,6 +49,11 @@ app.add_middleware(
 @app.get("/")
 def redirect_to_docs():
     return RedirectResponse("/docs")
+
+
+@app.get("/version")
+def get_version():
+    return VERSION
 
 
 logging.basicConfig(level=logging.INFO)

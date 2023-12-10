@@ -1,4 +1,5 @@
 import geopandas as gpd
+import numpy as np
 from pydantic import BaseModel
 
 
@@ -33,7 +34,7 @@ def get_filtered_plots(
 
     results = []
 
-    for _, row in converted.iterrows():
+    for _, row in converted.iloc[np.argsort(converted.area)].iterrows():
         results.append(
             Plot(
                 id=row.id,

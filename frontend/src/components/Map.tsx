@@ -31,16 +31,20 @@ export const Map = memo(({ setMap, children }: MapProps) => (
       [MIN_Y, MAX_X],
     ]}
     maxBoundsViscosity={1}
-    className="h-full max-w-full rounded-md focus:border-blue-400 border-neutral-100 border-4 border-solid focus:outline-none"
+    className="h-full max-w-full"
   >
+    <span
+      id="map-focus-marker"
+      className="absolute w-full h-full border-2 border-transparent z-[1000] pointer-events-none"
+    />
     <LayersControl>
-      <LayersControl.BaseLayer name="OpenStreetMap" checked>
+      <LayersControl.BaseLayer name="OpenStreetMap">
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
       </LayersControl.BaseLayer>
-      <LayersControl.BaseLayer name="Google satelite">
+      <LayersControl.BaseLayer name="Google satelite" checked>
         <TileLayer
           url="http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
           subdomains={["mt0", "mt1", "mt2", "mt3"]}
@@ -75,7 +79,7 @@ export const Map = memo(({ setMap, children }: MapProps) => (
         />
       </LayersControl.BaseLayer>
       {children}
-      <LayersControl.Overlay name="Purpose" checked>
+      <LayersControl.Overlay name="Purpose">
         <WMSTileLayer
           url="https://wms2.geopoz.poznan.pl/geoserver/urbanistyka/ows"
           params={

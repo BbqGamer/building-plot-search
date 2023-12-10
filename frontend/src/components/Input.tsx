@@ -10,7 +10,7 @@ export type InputProps = {
 export const Input = memo(
   ({ label, value, setValue, className, children, ...rest }: InputProps) => (
     <label className={`${className} text-sm`}>
-      <span className="text-neutral-100">{label}</span>
+      <span className="text-white">{label}</span>
       <div className="relative mt-1 ">
         <input
           placeholder="Enter"
@@ -18,7 +18,7 @@ export const Input = memo(
           onChange={(e) => {
             setValue(e.target.value);
           }}
-          className="w-full bg-neutral-100 rounded-md py-2 px-3 text-neutral-800 placeholder-neutral-400"
+          className="w-full bg-white rounded-md py-2 px-3 text-neutral-800 placeholder-neutral-400"
           {...rest}
         />
         {children}

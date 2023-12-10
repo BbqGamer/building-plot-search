@@ -14,7 +14,7 @@ export const Location = memo(({ request, setRequest }: RequestState) => {
   return (
     <Tab.Group as="div" className="text-sm">
       <span
-        className="text-neutral-100"
+        className="text-white"
         onClick={() => {
           (
             document.querySelector(
@@ -98,7 +98,7 @@ export const Location = memo(({ request, setRequest }: RequestState) => {
                 setRequest((y) => ({ ...y, radius: x }));
               }}
             />
-            <button className="text-neutral-800 p-2 rounded-md bg-neutral-100 mt-6">
+            <button className="text-neutral-800 p-2 rounded-md bg-white mt-6">
               <MapPinIcon className="h-5 w-5" />
             </button>
           </div>

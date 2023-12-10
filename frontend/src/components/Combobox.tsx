@@ -41,8 +41,8 @@ export const Combobox = memo(
           )}
           <div className="relative">
             <HeadlessCombobox.Input
-              className="w-full rounded-md border-none bg-neutral-100 py-2 pl-3 pr-10 text-neutral-800 focus:outline outline-4 outline-blue-400 placeholder-neutral-400"
-              displayValue={(x?: Option) => (x ? x.name : "")}
+              className="w-full rounded-md border-none bg-white py-2 pl-3 pr-10 text-neutral-800 placeholder-neutral-400"
+              displayValue={(x?: Option) => (x ? x.name : "Any")}
               onChange={(event) => {
                 setQuery(event.target.value);
               }}
@@ -61,7 +61,7 @@ export const Combobox = memo(
             </HeadlessCombobox.Button>
           </div>
           <div className="rounded-md overflow-hidden h-fit absolute mt-2 w-full z-[1]">
-            <HeadlessCombobox.Options className="max-h-80 overflow-auto rounded-md bg-neutral-100 py-1">
+            <HeadlessCombobox.Options className="max-h-80 overflow-auto rounded-md bg-white py-1">
               {filtered.length === 0 && query !== "" ? (
                 <div className="select-none py-2 px-4 text-neutral-400">
                   Nothing found
@@ -73,7 +73,7 @@ export const Combobox = memo(
                     className={({ active }) =>
                       `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
                         active
-                          ? "bg-neutral-400 text-neutral-100"
+                          ? "bg-neutral-400 text-white"
                           : "text-neutral-800"
                       }`
                     }
@@ -91,7 +91,7 @@ export const Combobox = memo(
                         {selected ? (
                           <span
                             className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
-                              active ? "text-neutral-100" : "text-neutral-800"
+                              active ? "text-white" : "text-neutral-800"
                             }`}
                           >
                             <CheckIcon className="h-5 w-5" aria-hidden="true" />

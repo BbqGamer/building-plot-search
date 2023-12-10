@@ -1,3 +1,4 @@
+import { Map } from "leaflet";
 import { Option } from "./components/Combobox";
 
 export const INITIAL_X = 16.9252;
@@ -96,4 +97,17 @@ export const fetchPlots = async (request: PlotsRequest) => {
   ) as Plot[];
 
   return plots;
+};
+
+export const flyTo = (map: Map | undefined, point: [number, number]) => {
+  if (!map) return;
+
+  const distance = map.distance(map.getCenter(), point);
+  const targetZoom = Math.max(16, map.getZoom());
+
+  if (distance < 10 && map.getZoom() === targetZoom) return;
+
+  map.flyTo(point, targetZoom, {
+    duration: 0.7,
+  });
 };

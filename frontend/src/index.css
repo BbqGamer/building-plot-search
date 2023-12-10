@@ -1,26 +1,84 @@
 @import url("https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;700&family=Mooli&family=Poppins&display=swap");
+@import url("leaflet/dist/leaflet.css");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  *:not([tabIndex="-1"]):focus {
-    @apply outline;
-    @apply outline-blue-400;
-    @apply outline-4;
+  * {
+    @apply !transition-[background-color,outline-color,border-color];
+  }
+
+  a,
+  button,
+  input,
+  *[tabindex] {
+    &:not([tabindex="-1"]) {
+      @apply outline outline-2 -outline-offset-2 outline-transparent focus:outline-put-300;
+    }
   }
 
   ::-webkit-scrollbar {
-    @apply w-1;
+    @apply w-1.5;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-neutral-500;
-    @apply rounded-md;
+    @apply button active:bg-put-300;
+  }
+}
+
+@layer components {
+  .button {
+    @apply p-0.5 bg-neutral-500 hover:bg-neutral-400 rounded-md;
+  }
+}
+
+.leaflet-control-zoom {
+  @apply !mt-2 !ml-2;
+}
+
+.leaflet-control {
+  @apply !border-none font-poppins;
+}
+
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  @apply !bg-neutral-500 hover:!bg-neutral-400 !text-white !border-none;
+}
+
+.leaflet-control-zoom-in {
+  @apply !rounded-t-md;
+}
+
+.leaflet-control-zoom-out {
+  @apply !rounded-b-md;
+}
+
+.leaflet-control-layers {
+  @apply !mt-2 !mr-2 !transition-none bg-neutral-500 text-white !accent-put-300;
+
+  &-toggle {
+    @apply bg-neutral-500 !border-none rounded-md;
   }
 
-  ::-webkit-scrollbar-thumb:hover {
-    @apply bg-neutral-600;
+  &-expanded {
+    @apply bg-neutral-700 px-2;
   }
+
+  &-separator {
+    @apply border-none mx-0 h-0.5 bg-neutral-500 rounded-full;
+  }
+}
+
+.leaflet-control-attribution {
+  @apply rounded-tl-md !bg-neutral-700 text-white pb-0.5 pr-1.5;
+
+  a {
+    @apply text-put-300;
+  }
+}
+
+.leaflet-container:focus #map-focus-marker {
+  @apply border-put-300;
 }

@@ -5,7 +5,7 @@ import geopandas as gpd
 
 gpd.options.io_engine = "pyogrio"
 
-DATA_DIR = Path("data")
+DATA_DIR = Path("processed")
 ENTRY_DATE_FORMAT = "%y%m%d-%H%M"
 
 
@@ -21,6 +21,7 @@ class Preprocessed(NamedTuple):
     tram_lines: gpd.GeoDataFrame
     rail_lines1: gpd.GeoDataFrame
     rail_lines2: gpd.GeoDataFrame
+
 
 class Processed(NamedTuple):
     plots: gpd.GeoDataFrame
