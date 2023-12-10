@@ -12,6 +12,12 @@ export const MAX_Y = 54.8334;
 
 export const DEFAULT_RADIUS = 8;
 
+export const fetchApiVersion = async () => {
+  const result = await fetch(API_ROOT + "/version");
+  const json = await result.json();
+  return json;
+};
+
 export enum ToponymType {
   District = 0,
   City = 1,
@@ -30,7 +36,7 @@ const API_ROOT =
     : "https://api.plots.vrepetskyi.codes";
 
 export const fetchToponyms = async () => {
-  const result = await fetch(API_ROOT + "/districts/", {});
+  const result = await fetch(API_ROOT + "/districts");
   const json = await result.json();
   return json.map((x: Omit<Toponym, "type">) => ({
     ...x,

@@ -15,6 +15,7 @@ import {
   INITIAL_X,
   INITIAL_Y,
   PlotsRequest,
+  fetchApiVersion,
   fetchPlots,
   flyTo,
 } from "../helpers";
@@ -54,6 +55,8 @@ export const Prompt = memo(() => {
     { keepPreviousData: true },
   );
 
+  const { data: apiVersion } = useQuery(["version"], fetchApiVersion);
+
   return (
     <PanelGroup direction="horizontal" onLayout={onLayout}>
       <Panel defaultSizePixels={471} minSizePixels={320} collapsible>
@@ -62,7 +65,8 @@ export const Prompt = memo(() => {
             <div className="text-xl w-full flex items-baseline -mt-0.5">
               <h1>Building Plot Search</h1>
               <span className="ml-4 text-neutral-300 text-sm">
-                UI v{APP_VERSION} / API v{APP_VERSION}
+                UI v{APP_VERSION}
+                {apiVersion ? ` / API v${apiVersion}` : ""}
               </span>
             </div>
           </div>
@@ -71,7 +75,14 @@ export const Prompt = memo(() => {
               <span className="w-full h-0.5 rounded-full bg-neutral-600" />
               <Filters request={request} setRequest={setRequest} />
               <span className="w-full h-0.5 rounded-full bg-neutral-600 my-2" />
-              <h2>Statistics</h2>
+              <div>
+                <h2>Statistics</h2>
+                <span className="text-sm">
+                  {plots && plots.length < 1000
+                    ? "All filtered plots are rendered."
+                    : "Rendering a thousand plots with the smallest area. Make the query more specific."}
+                </span>
+              </div>
               <span className="w-full h-0.5 rounded-full bg-neutral-600 my-2" />
               <div className="flex-1 gap-2 grid grid-cols-[repeat(auto-fill,minmax(225px,1fr))]">
                 {plots?.map((x) => (
