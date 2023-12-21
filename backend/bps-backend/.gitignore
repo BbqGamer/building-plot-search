@@ -1,1 +1,8 @@
 secrets.env
+
+volumes/data/*
+volumes/secrets/*
+
+!volumes/data/.gitkeep
+!volumes/secrets/.gitkeep
+

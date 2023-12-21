@@ -2,45 +2,24 @@ version: '3.8'
 services:
   nginx-certbot:
     image: jonasal/nginx-certbot:latest
-    env_file:
-      - ./secrets.env
+    volumes:
+      - ./volumes/startup:/startup
+      - ./volumes/secrets:/secrets
+      - ./volumes/config:/etc/nginx/user_conf.d
     ports:
       - 80:80
       - 443:443
-    volumes:
-      - startup:/startup
-      - secrets:/secrets
-      - config:/etc/nginx/user_conf.d
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    env_file:
+      - ./secrets.env
     command: /bin/sh -c 'chmod +x /startup/startup.sh; /startup/startup.sh'
   bps-fastapi:
-    image: vrepetskyi.azurecr.io/bps/fastapi:latest
     build: ../
-    deploy:
-      resources:
-        limits:
-          memory: 2g
     volumes:
-      - processed:/code/processed
+      - ./volumes/data:/code/data
+    ports:
+      - 8080:8080
     environment:
       - ENV=production
-volumes:
-  startup:
-    driver: azure_file
-    driver_opts:
-      share_name: startup
-      storage_account_name: bpsbackend
-  secrets:
-    driver: azure_file
-    driver_opts:
-      share_name: secrets
-      storage_account_name: bpsbackend
-  config:
-    driver: azure_file
-    driver_opts:
-      share_name: config
-      storage_account_name: bpsbackend
-  processed:
-    driver: azure_file
-    driver_opts:
-      share_name: processed
-      storage_account_name: bpsbackend
+
