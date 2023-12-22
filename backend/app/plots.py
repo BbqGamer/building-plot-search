@@ -1,6 +1,7 @@
 import geopandas as gpd
 import numpy as np
 from pydantic import BaseModel
+from typing import Optional
 
 
 class Plot(BaseModel):
@@ -15,8 +16,8 @@ class Plot(BaseModel):
 
 
 def get_filtered_plots(
-    plots: gpd.GeoDataFrame, district_id: int, min_area: float, max_area: float
-) -> list[Plot]:
+    plots: gpd.GeoDataFrame, district_id: Optional[int],
+    min_area: Optional[float], max_area: Optional[float]) -> list[Plot]:
     filtered = plots[plots.is_probably_free]
 
     if district_id:

@@ -82,10 +82,11 @@ def get_preprocessed() -> Preprocessed:
             fetch_gdf_from_geoserver('topografia:' + layer, TOPO_WFS)
         )
 
-    SIP_WFS = GEOPOZ_GEOSERVER_URL + '/sip_wfs/wfs'
-    data.append(
-        fetch_gdf_from_geoserver('sip_wfs:mpzp_funkcje_pow_g_sql_wfs', SIP_WFS)
-    )
-
     preprocessed = Preprocessed(*data)
     return preprocessed
+
+def get_purposes() -> gpd.GeoDataFrame:
+    logging.info("Getting and preprocessing remote data...")
+    SIP_WFS = GEOPOZ_GEOSERVER_URL + '/sip_wfs/wfs'
+    return fetch_gdf_from_geoserver('sip_wfs:mpzp_funkcje_pow_g_sql_wfs', SIP_WFS)
+

@@ -30,6 +30,7 @@ def prepare_plot_dataframe(plots: gpd.GeoDataFrame):
 
     plots.rename(columns=RENAME_MAPPING, inplace=True)
 
+
 def swap_coordinates(coord1, coord2):
     if coord1 is not None and coord2 is not None:
         return coord2, coord1
@@ -37,11 +38,13 @@ def swap_coordinates(coord1, coord2):
         logging.info("None in swap_coordinates")
         return None
     
+
 def leave_two_coords(coords):
     if coords is not None:
         return coords[:2]
     else:
         return None
+
 
 def prepare_clearing_plots_dataframe(df: gpd.GeoDataFrame):
     df = df[df.geometry.notnull()]
@@ -85,6 +88,7 @@ def check_if_plot_is_free(plots: gpd.GeoDataFrame, buildings: gpd.GeoDataFrame):
 
     plots["is_probably_free"] = ~plots["id"].isin(overlay["id"])
 
+
 def multi_pol_unfree_plot(plots: gpd.GeoDataFrame, to_remove: gpd.GeoDataFrame, threshold: float = 0.02):
     to_remove = to_remove[to_remove.geometry.notnull()]
     to_remove["geometry"] = to_remove["geometry"].apply(lambda x: transform(swap_coordinates, x))
@@ -111,6 +115,7 @@ def multi_pol_unfree_plot(plots: gpd.GeoDataFrame, to_remove: gpd.GeoDataFrame, 
 
     to_update = plots["is_probably_free"]==True
     plots.loc[to_update, "is_probably_free"] = ~plots.loc[to_update, "id"].isin(new_plots["id"])
+
 
 def unfree_plot(plots: gpd.GeoDataFrame, to_remove: gpd.GeoDataFrame, threshold: float = 0.02):
     to_remove.crs = plots.crs

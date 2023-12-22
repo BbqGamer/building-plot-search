@@ -2,6 +2,7 @@ import logging
 from datetime import datetime
 from os import path, scandir
 from pathlib import Path
+from typing import Optional
 
 import geopandas as gpd
 import requests
@@ -13,8 +14,9 @@ CHANGELOG_URL = "https://bip.geopoz.poznan.pl/gpb/rejestr/1675,dok.html"
 LATEST_TIME_SELECTOR = "#table-listing table tr:nth-child(2) td:first-child"
 
 
-def get_latest_path_and_freshness() -> [str | None, bool]:
-    "Returns the path to the latest processed data and a boolean representing its freshness"
+def get_latest_path_and_freshness() -> list[str | Optional[bool]]:
+    """Returns the path to the latest processed data
+       and a boolean representing its freshness"""
 
     latest = None
     local_time = None
@@ -25,7 +27,7 @@ def get_latest_path_and_freshness() -> [str | None, bool]:
             latest = max(entries)
             local_time = datetime.strptime(latest, ENTRY_DATE_FORMAT)
 
-    if not latest:
+    if not latest or not local_time:
         logging.info("No local data is available")
         return [None, False]
 
@@ -33,6 +35,8 @@ def get_latest_path_and_freshness() -> [str | None, bool]:
         response = requests.get(CHANGELOG_URL)
         parsed = BeautifulSoup(response.text, "html.parser")
         remote_time_tag = parsed.select_one(LATEST_TIME_SELECTOR)
+        if not remote_time_tag:
+            return [latest, False]
         remote_time = datetime.strptime(remote_time_tag.text, "%d.%m.%Y %H:%M")
 
         is_fresh = remote_time < local_time
@@ -49,8 +53,9 @@ def get_latest_path_and_freshness() -> [str | None, bool]:
 
 
 def get_local_processed(dir_name: str) -> Processed:
+    date = datetime.strptime(dir_name, ENTRY_DATE_FORMAT)
     logging.info(
-        f"Retrieving local data for {datetime.strptime(dir_name, ENTRY_DATE_FORMAT)}..."
+        f"Retrieving local data for {date}..."
     )
 
     return Processed(

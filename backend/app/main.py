@@ -1,5 +1,6 @@
 import logging
 from os import getenv
+from typing import Optional
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi import FastAPI
@@ -14,6 +15,8 @@ from app.data.management import (
 )
 from app.districts import get_all_districts
 from app.plots import get_filtered_plots
+from app.data.acquisition import get_purposes
+from app.purposes import get_all_purposes
 
 app = FastAPI()
 
@@ -26,7 +29,10 @@ def custom_openapi():
     openapi_schema = get_openapi(
         title="Building plot search API",
         version=VERSION,
-        description="The app is available at [https://plots.vrepetskyi.codes](https://plots.vrepetskyi.codes)",
+        description=(
+            "The pp is available at "
+            "[https://plots.vrepetskyi.codes](https://plots.vrepetskyi.codes)"
+        ),
         routes=app.routes,
     )
     app.openapi_schema = openapi_schema
@@ -60,7 +66,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 data = get_initial_data()
-
+mpzp = get_purposes()
 
 @app.get("/update-data/")
 def update_data():
@@ -92,5 +98,12 @@ def get_districts():
 
 
 @app.get("/plots/")
-def get_plots(district_id: int = None, min_area: int = None, max_area: int = None):
+def get_plots(district_id: Optional[int] = None,
+                 min_area: Optional[int] = None,
+                 max_area: Optional[int] = None): 
     return get_filtered_plots(data.plots, district_id, min_area, max_area)
+
+@app.get("/purposes/")
+def get_purposes():
+    return get_all_purposes(mpzp)
+

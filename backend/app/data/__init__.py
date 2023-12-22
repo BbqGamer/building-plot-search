@@ -20,7 +20,6 @@ class Preprocessed(NamedTuple):
     tram_lines: gpd.GeoDataFrame
     rail_lines1: gpd.GeoDataFrame
     rail_lines2: gpd.GeoDataFrame
-    mpzp_purposes: gpd.GeoDataFrame
 
 
 class Processed(NamedTuple):
