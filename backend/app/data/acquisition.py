@@ -24,7 +24,8 @@ def get_gdf_from_geopoz(id: int) -> gpd.GeoDataFrame:
     with ZipFile(io.BytesIO(response.content)) as zip:
         for file in zip.filelist:
             if file.filename.endswith(".gml"):
-                logging.info(f"Converting {url}/{file.filename} to a GeoDataFrame...")
+                msg  = f"Converting {url}/{file.filename} to a GeoDataFrame..."
+                logging.info(msg)
                 return gpd.read_file(zip.open(file))
 
     raise Exception(f"There is no GML file in {url}")
@@ -32,7 +33,7 @@ def get_gdf_from_geopoz(id: int) -> gpd.GeoDataFrame:
 
 GEOPOZ_GEOSERVER_URL = 'https://wms2.geopoz.poznan.pl/geoserver'
 
-def fetch_gdf_from_geoserver(layer_name: str, service_url) -> gpd.GeoDataFrame:
+def fetch_gdf_from_geoserver(layer: str, service_url) -> gpd.GeoDataFrame:
     """Fetches a GML files from OGC service by layer name.
        Reads and returns a GeoDataFrame from it 
        link to some services: https://sipgeoportal.geopoz.poznan.pl/uslugi-ogc/
@@ -44,11 +45,11 @@ def fetch_gdf_from_geoserver(layer_name: str, service_url) -> gpd.GeoDataFrame:
         sys.exit(1)
         
     OUTPUT_FORMAT = 'GML2'
-    response = wfs11.getfeature(typename=layer_name, outputFormat=OUTPUT_FORMAT)
-    logging.info(f"Converting {layer_name} to a GeoDataFrame...")
+    response = wfs11.getfeature(typename=layer, outputFormat=OUTPUT_FORMAT)
+    logging.info(f"Converting {layer} to a GeoDataFrame...")
     try:
         gdf = gpd.read_file(response.read())
-        logging.info(f"Conversion of {layer_name} to a GeoDataFrame successful.")
+        logging.info(f"Conversion of {layer} to a GeoDataFrame successful.")
         return gdf
     except Exception as e:
         logging.error(f"Error parsing GML file: {e}")
@@ -68,7 +69,6 @@ def get_preprocessed() -> Preprocessed:
         'tereny_komunikacyjne_e_sql',
         'tereny_wodne_e_sql',
         'tereny_wodne_sql',
-        'kon_line_sql',
         'zwj_poly_sql',
         'zwr_poly_sql',
         'kot_line_sql',
@@ -76,9 +76,16 @@ def get_preprocessed() -> Preprocessed:
         'kow_line_sql',
     ]
     
-    TOPO_SERVICE = GEOPOZ_GEOSERVER_URL + '/topografia/wfs'
+    TOPO_WFS = GEOPOZ_GEOSERVER_URL + '/topografia/wfs'
     for layer in topo_layers:
-        data.append(fetch_gdf_from_geoserver(layer, TOPO_SERVICE))
-    
+        data.append(
+            fetch_gdf_from_geoserver('topografia:' + layer, TOPO_WFS)
+        )
+
+    SIP_WFS = GEOPOZ_GEOSERVER_URL + '/sip_wfs/wfs'
+    data.append(
+        fetch_gdf_from_geoserver('sip_wfs:mpzp_funkcje_pow_g_sql_wfs', SIP_WFS)
+    )
+
     preprocessed = Preprocessed(*data)
     return preprocessed

@@ -15,12 +15,12 @@ class Preprocessed(NamedTuple):
     streets: gpd.GeoDataFrame
     water_areas1: gpd.GeoDataFrame
     water_areas2: gpd.GeoDataFrame
-    line_streets: gpd.GeoDataFrame
     staying_water: gpd.GeoDataFrame
     running_water: gpd.GeoDataFrame
     tram_lines: gpd.GeoDataFrame
     rail_lines1: gpd.GeoDataFrame
     rail_lines2: gpd.GeoDataFrame
+    mpzp_purposes: gpd.GeoDataFrame
 
 
 class Processed(NamedTuple):

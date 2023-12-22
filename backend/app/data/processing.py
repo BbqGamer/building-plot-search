@@ -151,7 +151,7 @@ def get_processed(preprocessed: Preprocessed) -> Processed:
         multi_pol_unfree_plot(preprocessed.plots, df)
         logging.info("After removing intersecting "+str(df.__class__.__name__)+" number of free plots for now is: "+str(len(preprocessed.plots[preprocessed.plots["is_probably_free"]==True])))
 
-    for df in [preprocessed.running_water, preprocessed.staying_water, preprocessed.line_streets, preprocessed.tram_lines, preprocessed.rail_lines1, preprocessed.rail_lines2]:
+    for df in [preprocessed.running_water, preprocessed.staying_water, preprocessed.tram_lines, preprocessed.rail_lines1, preprocessed.rail_lines2]:
         if df is not None:
             unfree_plot(preprocessed.plots, df)
         logging.info("After removing intersecting "+str(df.__class__.__name__)+" number of free plots for now is: "+str(len(preprocessed.plots[preprocessed.plots["is_probably_free"]==True])))
