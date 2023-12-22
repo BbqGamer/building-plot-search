@@ -8,6 +8,8 @@ import requests
 from owslib.wfs import WebFeatureService
 
 from app.data import Preprocessed
+from app.data.processing import swap_coordinates
+import shapely.ops
 
 
 def get_gdf_from_geopoz(id: int) -> gpd.GeoDataFrame:
@@ -88,5 +90,11 @@ def get_preprocessed() -> Preprocessed:
 def get_purposes() -> gpd.GeoDataFrame:
     logging.info("Getting and preprocessing remote data...")
     SIP_WFS = GEOPOZ_GEOSERVER_URL + '/sip_wfs/wfs'
-    return fetch_gdf_from_geoserver('sip_wfs:mpzp_funkcje_pow_g_sql_wfs', SIP_WFS)
+    gdf = fetch_gdf_from_geoserver('sip_wfs:mpzp_funkcje_pow_g_sql_wfs', SIP_WFS)
+    # For some reason, the coordinates are swapped after importing data from SIP
+    # to GeoDataframe. This is a workaround.
+    gdf['geometry'] = gdf['geometry'].apply(
+        lambda x: shapely.ops.transform(swap_coordinates, x)
+    )
+    return gdf
 

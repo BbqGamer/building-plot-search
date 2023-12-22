@@ -100,8 +100,12 @@ def get_districts():
 @app.get("/plots/")
 def get_plots(district_id: Optional[int] = None,
                  min_area: Optional[int] = None,
-                 max_area: Optional[int] = None): 
-    return get_filtered_plots(data.plots, district_id, min_area, max_area)
+                 max_area: Optional[int] = None,
+                 purpose_group: Optional[str] = None,
+                 purpose_subgroup: Optional[str] = None
+    ): 
+    return get_filtered_plots(data.plots, mpzp, district_id,
+            min_area, max_area, purpose_group, purpose_subgroup)
 
 @app.get("/purposes/")
 def get_purposes():

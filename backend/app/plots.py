@@ -2,6 +2,7 @@ import geopandas as gpd
 import numpy as np
 from pydantic import BaseModel
 from typing import Optional
+from app.purposes import get_purpose_region
 
 
 class Plot(BaseModel):
@@ -16,8 +17,9 @@ class Plot(BaseModel):
 
 
 def get_filtered_plots(
-    plots: gpd.GeoDataFrame, district_id: Optional[int],
-    min_area: Optional[float], max_area: Optional[float]) -> list[Plot]:
+    plots: gpd.GeoDataFrame, mpzp: gpd.GeoDataFrame, district_id: Optional[int],
+    min_area: Optional[float], max_area: Optional[float], pgroup: Optional[str], 
+psubgroup: Optional[str])-> list[Plot]:
     filtered = plots[plots.is_probably_free]
 
     if district_id:
@@ -28,6 +30,12 @@ def get_filtered_plots(
 
     if max_area:
         filtered = filtered[filtered.area <= max_area]
+    
+    if pgroup or psubgroup:
+        THRESHOLD = 0.8
+        reg = get_purpose_region(mpzp, pgroup, psubgroup)
+        filtered = filtered[filtered.geometry.apply(
+            lambda x: percentage_contained(x, reg) > THRESHOLD)]
 
     filtered = filtered.head(1000)
     converted = filtered.to_crs("WGS84")
@@ -53,3 +61,6 @@ def get_filtered_plots(
         )
 
     return results
+
+def percentage_contained(p1, p2):
+    return p1.intersection(p2).area
