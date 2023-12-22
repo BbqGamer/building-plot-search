@@ -1,4 +1,5 @@
 import io
+import sys
 import logging
 from zipfile import ZipFile
 
@@ -10,7 +11,8 @@ from app.data import Preprocessed
 
 
 def get_gdf_from_geopoz(id: int) -> gpd.GeoDataFrame:
-    """Fetches a ZIP file from GeoPoz by an ID. Finds a GML file in it. Reads and returns a GeoDataFrame from it."""
+    """Fetches a ZIP file from GeoPoz by an ID. Finds a GML file in it.
+       Reads and returns a GeoDataFrame from it."""
 
     url = f"https://bip.geopoz.poznan.pl/download/119/{id}/data.zip"
 
@@ -27,27 +29,56 @@ def get_gdf_from_geopoz(id: int) -> gpd.GeoDataFrame:
 
     raise Exception(f"There is no GML file in {url}")
 
-def get_gdf_wfs_from_geopoz(name: str) -> gpd.GeoDataFrame:
-    """Fetches a GML files from GeoPoz by layer name. Reads and returns a GeoDataFrame from it."""
 
-    url = 'https://wms2.geopoz.poznan.pl/geoserver/topografia//wfs'
+GEOPOZ_GEOSERVER_URL = 'https://wms2.geopoz.poznan.pl/geoserver'
 
-    wfs11 = WebFeatureService(url, version='1.1.0')
-    output_format = 'GML2'
-    response = wfs11.getfeature(typename='topografia:'+str(name), outputFormat=output_format)
-    logging.info(f"Converting {name} to a GeoDataFrame...")
+def fetch_gdf_from_geoserver(layer_name: str, service_url) -> gpd.GeoDataFrame:
+    """Fetches a GML files from OGC service by layer name.
+       Reads and returns a GeoDataFrame from it 
+       link to some services: https://sipgeoportal.geopoz.poznan.pl/uslugi-ogc/
+    """
+
+    wfs11 = WebFeatureService(service_url, version='1.1.0')
+    if wfs11 is None:
+        logging.error("Error connecting to WFS service.")
+        sys.exit(1)
+        
+    OUTPUT_FORMAT = 'GML2'
+    response = wfs11.getfeature(typename=layer_name, outputFormat=OUTPUT_FORMAT)
+    logging.info(f"Converting {layer_name} to a GeoDataFrame...")
     try:
-        gdf = gpd.read_file(io.BytesIO(response.read())) 
-        if gdf is not None:    
-            logging.info(f"Conversion of {name} to a GeoDataFrame successful.")
+        gdf = gpd.read_file(response.read())
+        logging.info(f"Conversion of {layer_name} to a GeoDataFrame successful.")
         return gdf
     except Exception as e:
-        print(f"Error parsing GML file: {e}")
+        logging.error(f"Error parsing GML file: {e}")
+        sys.exit(1)
+
     
 
 def get_preprocessed() -> Preprocessed:
     logging.info("Getting and preprocessing remote data...")
-    preprocessed = Preprocessed(get_gdf_from_geopoz(8781), get_gdf_from_geopoz(8782), get_gdf_wfs_from_geopoz("tereny_komunikacyjne_e_sql"), 
-                                get_gdf_wfs_from_geopoz("tereny_wodne_e_sql"), get_gdf_wfs_from_geopoz("tereny_wodne_sql"), get_gdf_wfs_from_geopoz("kon_line_sql"), 
-                                get_gdf_wfs_from_geopoz("zwj_poly_sql"), get_gdf_wfs_from_geopoz("zwr_poly_sql"), get_gdf_wfs_from_geopoz("kot_line_sql"), get_gdf_wfs_from_geopoz("kok_line_sql"), get_gdf_wfs_from_geopoz("kow_line_sql"))
+    
+    data = [
+        get_gdf_from_geopoz(8781),
+        get_gdf_from_geopoz(8782),
+    ]
+
+    topo_layers = [
+        'tereny_komunikacyjne_e_sql',
+        'tereny_wodne_e_sql',
+        'tereny_wodne_sql',
+        'kon_line_sql',
+        'zwj_poly_sql',
+        'zwr_poly_sql',
+        'kot_line_sql',
+        'kok_line_sql',
+        'kow_line_sql',
+    ]
+    
+    TOPO_SERVICE = GEOPOZ_GEOSERVER_URL + '/topografia/wfs'
+    for layer in topo_layers:
+        data.append(fetch_gdf_from_geoserver(layer, TOPO_SERVICE))
+    
+    preprocessed = Preprocessed(*data)
     return preprocessed
